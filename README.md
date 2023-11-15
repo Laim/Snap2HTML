@@ -1,11 +1,5 @@
 # Snap2HTML-NG
 
-**NOTE**: I am currently in the process of re-writing a major chunk of this based on improvements recommended from friends, a family member and issues.
-
-You can see progress in the [dev-branch](https://github.com/Laim/Snap2HTML-NG/tree/dev-branch), by checking out the [preview builds](https://github.com/Laim/Snap2HTML-NG/releases) and the [project](https://github.com/users/Laim/projects/5).
-
-_________________
-
 This application is a modified version of [Snap2HTML](https://github.com/rlv-dan/Snap2HTML) by RL Vision.
 
 Snap2HTML-NG takes a "snapshot" of the folder structure on your Hard Drive or Network Drive and saves it as an HTML file. 
