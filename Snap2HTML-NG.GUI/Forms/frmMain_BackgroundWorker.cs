@@ -11,19 +11,20 @@ namespace Snap2HTMLNG
         // This runs on a separate thread from the GUI
         private void backgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
+            UserSettings us = new UserSettings();
 
             // Load the user settings from the configuration file as we're using the GUI here
             UserSettingsModel usm = new UserSettingsModel
             {
-                RootDirectory = XmlConfigurator.Read("RootFolder"),
-                Title = XmlConfigurator.Read("Title"),
-                OutputFile = XmlConfigurator.Read("OutputFile"),
-                SkipHiddenItems = bool.Parse(XmlConfigurator.Read("SkipHiddenItems")),
-                SkipSystemItems = bool.Parse(XmlConfigurator.Read("SkipSystemItems")),
-                OpenInBrowserAfterCapture = bool.Parse(XmlConfigurator.Read("OpenInBrowserAfterCapture")),
-                LinkFiles = bool.Parse(XmlConfigurator.Read("LinkFiles")),
-                LinkRoot = XmlConfigurator.Read("LinkRoot"),
-                SearchPattern = XmlConfigurator.Read("SearchPattern")
+                RootDirectory = us.GetString("RootDirectory"),
+                Title = us.GetString("Title"),
+                OutputFile = us.GetString("OutputFile"),
+                SkipHiddenItems = us.GetBool("SkipHiddenItems"),
+                SkipSystemItems = us.GetBool("SkipSystemItems"),
+                OpenInBrowserAfterCapture = us.GetBool("OpenInBrowserAfterCapture"),
+                LinkFiles = us.GetBool("LinkFiles"),
+                LinkRoot = us.GetString("LinkRoot"),
+                SearchPattern = us.GetString("SearchPattern")
             };
 
             DataBuilder.Build(usm, Application.ProductName, Application.ProductVersion, backgroundWorker);

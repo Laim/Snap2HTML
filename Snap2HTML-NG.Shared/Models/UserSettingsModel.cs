@@ -1,6 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-
-namespace Snap2HTMLNG.Shared.Models
+﻿namespace Snap2HTMLNG.Shared.Models
 {
     public class UserSettingsModel
     {
@@ -74,6 +72,22 @@ namespace Snap2HTMLNG.Shared.Models
 		{
 			get { return _searchPattern; }
 			set { _searchPattern = value; }
+		}
+
+		private bool _directoriesOnly;
+
+		public bool DirectoriesOnly
+		{
+			get { return _directoriesOnly; }
+			set { _directoriesOnly = value; }
+		}
+
+		private bool _checkForUpdates;
+
+		public bool CheckForUpdates
+		{
+			get { return _checkForUpdates; }
+			set { _checkForUpdates = value; }
 		}
 
 	}

@@ -17,6 +17,9 @@ namespace Snap2HTMLNG
         public frmMain()
         {
             InitializeComponent();
+
+            UserSettings us = new UserSettings();
+            us.SetString("CheckForUpdates", "Go Fuck");
         }
 
         private void frmMain_Load(object sender, EventArgs e)
@@ -71,13 +74,17 @@ namespace Snap2HTMLNG
         /// </summary>
         private void LoadUserSettings()
         {
-            txtRoot.Text = XmlConfigurator.Read("RootFolder");
-            txtTitle.Text = XmlConfigurator.Read("Title");
-            chkHidden.Checked = bool.Parse(XmlConfigurator.Read("SkipHiddenItems"));
-            chkSystem.Checked = bool.Parse(XmlConfigurator.Read("SkipSystemItems"));
-            chkOpenOutput.Checked = bool.Parse(XmlConfigurator.Read("OpenInBrowserAfterCapture"));
-            chkLinkFiles.Checked = bool.Parse(XmlConfigurator.Read("LinkFiles"));
-            txtSearchPattern.Text = XmlConfigurator.Read("SearchPattern");
+            UserSettings us = new UserSettings();
+
+            txtRoot.Text = us.GetString("RootDirectory");
+            txtTitle.Text = us.GetString("Title");
+            chkHidden.Checked = us.GetBool("SkipHiddenItems");
+            chkSystem.Checked = us.GetBool("SkipSystemItems");
+            chkOpenOutput.Checked = us.GetBool("OpenInBrowserAfterCapture");
+            chkLinkFiles.Checked = us.GetBool("LinkFiles");
+            txtSearchPattern.Text = us.GetString("SearchPattern");
+            cbCheckForUpdates.Checked = us.GetBool("CheckForUpdates");
+            cbDirectoriesOnly.Checked = us.GetBool("DirectoriesOnly");
         }
 
         /// <summary>
@@ -129,36 +136,19 @@ namespace Snap2HTMLNG
 
                 if (!saveFileDialog1.FileName.ToLower().EndsWith(".html")) saveFileDialog1.FileName += ".html";
 
-                // TODO: Change this in Version 3.1 to use the new XML loading system
-                // Declare the user settings nodes that are available in UserSettings.xml (see Shared.UserSettings.xml)
-                string[] nodes = { 
-                    "RootFolder", 
-                    "Title", 
-                    "OutputFile", 
-                    "SkipHiddenItems", 
-                    "SkipSystemItems", 
-                    "OpenInBrowserAfterCapture", 
-                    "LinkFiles", 
-                    "LinkRoot", 
-                    "SearchPattern"
-                };
-
-                // Declare our actual values to be saved to the nodes
-                string[] values =
-                {
-                    txtRoot.Text,
-                    txtTitle.Text,
-                    saveFileDialog1.FileName,
-                    chkHidden.Checked.ToString(),
-                    chkSystem.Checked.ToString(),
-                    chkOpenOutput.Checked.ToString(),
-                    chkLinkFiles.Checked.ToString(),
-                    txtLinkRoot.Text,
-                    txtSearchPattern.Text
-                };
-
-                // Write the settings to the SettingsFile
-                XmlConfigurator.Write(nodes, values);
+                // Save our settings
+                UserSettings us = new UserSettings();
+                us.SetString("RootDirectory", txtRoot.Text);
+                us.SetString("Title", txtTitle.Text);
+                us.SetString("OutputFile", saveFileDialog1.FileName);
+                us.SetBool("SkipHiddenItems", chkHidden.Checked);
+                us.SetBool("SkipSystemItems", chkSystem.Checked);
+                us.SetBool("OpenInBrowserAfterCapture", chkOpenOutput.Checked);
+                us.SetBool("LinkFiles", chkLinkFiles.Checked);
+                us.SetString("LinkRoot", txtLinkRoot.Text);
+                us.SetString("SearchPattern", txtSearchPattern.Text);
+                us.SetBool("DirectoriesOnly", cbDirectoriesOnly.Checked);
+                us.SetBool("CheckForUpdates", cbCheckForUpdates.Checked);
 
                 // begin generating html
                 StartProcessing();
@@ -352,6 +342,19 @@ namespace Snap2HTMLNG
                 }
             }
             doc.Save("UserSettings.xml");
+        }
+
+        private void cbDirectoriesOnly_CheckedChanged(object sender, EventArgs e)
+        {
+            if(cbDirectoriesOnly.Checked)
+            {
+                txtSearchPattern.Text = "*DirectoriesOnly";
+                txtSearchPattern.Enabled = false;
+            } else
+            {
+                txtSearchPattern.Text = "*";
+                txtSearchPattern.Enabled = true;
+            }
         }
     }
 }

@@ -71,6 +71,7 @@
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.lblStatus = new System.Windows.Forms.ToolStripStatusLabel();
+            this.cbDirectoriesOnly = new System.Windows.Forms.CheckBox();
             this.tabCtrl.SuspendLayout();
             this.tabSnapshot.SuspendLayout();
             this.tabCustomDesign.SuspendLayout();
@@ -98,6 +99,7 @@
             // 
             // tabSnapshot
             // 
+            this.tabSnapshot.Controls.Add(this.cbDirectoriesOnly);
             this.tabSnapshot.Controls.Add(this.txtSearchPattern);
             this.tabSnapshot.Controls.Add(this.lblSearchPattern);
             this.tabSnapshot.Controls.Add(this.label2);
@@ -536,6 +538,17 @@
             this.lblStatus.Size = new System.Drawing.Size(50, 20);
             this.lblStatus.Text = "Ready";
             // 
+            // cbDirectoriesOnly
+            // 
+            this.cbDirectoriesOnly.AutoSize = true;
+            this.cbDirectoriesOnly.Location = new System.Drawing.Point(213, 76);
+            this.cbDirectoriesOnly.Name = "cbDirectoriesOnly";
+            this.cbDirectoriesOnly.Size = new System.Drawing.Size(131, 21);
+            this.cbDirectoriesOnly.TabIndex = 21;
+            this.cbDirectoriesOnly.Text = "Directories Only";
+            this.cbDirectoriesOnly.UseVisualStyleBackColor = true;
+            this.cbDirectoriesOnly.CheckedChanged += new System.EventHandler(this.cbDirectoriesOnly_CheckedChanged);
+            // 
             // frmMain
             // 
             this.AcceptButton = this.cmdCreate;
@@ -618,6 +631,7 @@
         private System.Windows.Forms.GroupBox gbPreferences;
         private System.Windows.Forms.CheckBox cbCheckForUpdates;
         private System.Windows.Forms.Label lblCheckForUpdatesNotice;
+        private System.Windows.Forms.CheckBox cbDirectoriesOnly;
     }
 }
 

@@ -21,7 +21,9 @@ namespace Snap2HTMLNG.Shared.Updater
 
         public Updater()
         {
-          _checkForUpdates = bool.Parse(XmlConfigurator.Read("CheckForUpdates"));
+            UserSettings us = new UserSettings();
+
+          _checkForUpdates = us.GetBool("CheckForUpdates");
 
 #if DEBUG
             _checkForUpdates = true;
