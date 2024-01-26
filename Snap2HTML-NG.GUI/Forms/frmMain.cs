@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using System.IO;
 using System.Windows.Forms;
-using System.Xml;
 using Snap2HTMLNG.Forms;
 using Snap2HTMLNG.Shared.Settings;
 using Snap2HTMLNG.Shared.Updater;
@@ -13,13 +12,12 @@ namespace Snap2HTMLNG
     {
         private bool initDone = false;
         private bool runningAutomated = false;
+        private readonly UserSettings userSettings = new UserSettings();
+
 
         public frmMain()
         {
             InitializeComponent();
-
-            UserSettings us = new UserSettings();
-            us.SetString("CheckForUpdates", "Go Fuck");
         }
 
         private void frmMain_Load(object sender, EventArgs e)
@@ -74,17 +72,22 @@ namespace Snap2HTMLNG
         /// </summary>
         private void LoadUserSettings()
         {
-            UserSettings us = new UserSettings();
-
-            txtRoot.Text = us.GetString("RootDirectory");
-            txtTitle.Text = us.GetString("Title");
-            chkHidden.Checked = us.GetBool("SkipHiddenItems");
-            chkSystem.Checked = us.GetBool("SkipSystemItems");
-            chkOpenOutput.Checked = us.GetBool("OpenInBrowserAfterCapture");
-            chkLinkFiles.Checked = us.GetBool("LinkFiles");
-            txtSearchPattern.Text = us.GetString("SearchPattern");
-            cbCheckForUpdates.Checked = us.GetBool("CheckForUpdates");
-            cbDirectoriesOnly.Checked = us.GetBool("DirectoriesOnly");
+            txtRoot.Text = userSettings.GetString("RootDirectory");
+            txtTitle.Text = userSettings.GetString("Title");
+            chkHidden.Checked = userSettings.GetBool("SkipHiddenItems");
+            chkSystem.Checked = userSettings.GetBool("SkipSystemItems");
+            chkOpenOutput.Checked = userSettings.GetBool("OpenInBrowserAfterCapture");
+            chkLinkFiles.Checked = userSettings.GetBool("LinkFiles");
+            txtLinkRoot.Text = userSettings.GetString("LinkRoot");
+            txtSearchPattern.Text = userSettings.GetString("SearchPattern");
+            cbCheckForUpdates.Checked = userSettings.GetBool("CheckForUpdates");
+            cbDirectoriesOnly.Checked = userSettings.GetBool("DirectoriesOnly");
+            dateTimePickerFileDate.Value = userSettings.GetDateTime("FileDate");
+            
+            if (userSettings.GetDateTime("FileDate") > dateTimePickerFileDate.MinDate)
+            {
+                chkFileDateEnable.Checked = true;
+            }
         }
 
         /// <summary>
@@ -137,18 +140,18 @@ namespace Snap2HTMLNG
                 if (!saveFileDialog1.FileName.ToLower().EndsWith(".html")) saveFileDialog1.FileName += ".html";
 
                 // Save our settings
-                UserSettings us = new UserSettings();
-                us.SetString("RootDirectory", txtRoot.Text);
-                us.SetString("Title", txtTitle.Text);
-                us.SetString("OutputFile", saveFileDialog1.FileName);
-                us.SetBool("SkipHiddenItems", chkHidden.Checked);
-                us.SetBool("SkipSystemItems", chkSystem.Checked);
-                us.SetBool("OpenInBrowserAfterCapture", chkOpenOutput.Checked);
-                us.SetBool("LinkFiles", chkLinkFiles.Checked);
-                us.SetString("LinkRoot", txtLinkRoot.Text);
-                us.SetString("SearchPattern", txtSearchPattern.Text);
-                us.SetBool("DirectoriesOnly", cbDirectoriesOnly.Checked);
-                us.SetBool("CheckForUpdates", cbCheckForUpdates.Checked);
+                userSettings.SetString("RootDirectory", txtRoot.Text);
+                userSettings.SetString("Title", txtTitle.Text);
+                userSettings.SetString("OutputFile", saveFileDialog1.FileName);
+                userSettings.SetBool("SkipHiddenItems", chkHidden.Checked);
+                userSettings.SetBool("SkipSystemItems", chkSystem.Checked);
+                userSettings.SetBool("OpenInBrowserAfterCapture", chkOpenOutput.Checked);
+                userSettings.SetBool("LinkFiles", chkLinkFiles.Checked);
+                userSettings.SetString("LinkRoot", txtLinkRoot.Text);
+                userSettings.SetString("SearchPattern", txtSearchPattern.Text);
+                userSettings.SetBool("DirectoriesOnly", cbDirectoriesOnly.Checked);
+                userSettings.SetBool("CheckForUpdates", cbCheckForUpdates.Checked);
+                userSettings.SetDateTime("FileDate", DateTime.Parse(dateTimePickerFileDate.Text));
 
                 // begin generating html
                 StartProcessing();
@@ -297,7 +300,11 @@ namespace Snap2HTMLNG
                     if (initDone)
                     {
                         txtLinkRoot.Text = txtRoot.Text;
-                        txtTitle.Text = "Snapshot of " + txtRoot.Text;
+
+                        if(txtTitle.Text == string.Empty || txtTitle.Text.Length == 0)
+                        {
+                            txtTitle.Text = "Snapshot of " + txtRoot.Text;
+                        }
                     }
 
                     return true;
@@ -317,7 +324,7 @@ namespace Snap2HTMLNG
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Could not select folder:\n\n" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Could not select folder:\n\n" + ex.Message, "Error #4", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
 
@@ -325,23 +332,14 @@ namespace Snap2HTMLNG
 
         private void cbCheckForUpdates_CheckedChanged(object sender, EventArgs e)
         {
-            // TODO: Change this in Version 3.1 to use the new XML loading system
-            XmlDocument doc = new XmlDocument();
-            doc.Load("UserSettings.xml");
-
-            XmlNodeList nodeList = doc.GetElementsByTagName("CheckForUpdates");
-            foreach(XmlNode node in nodeList)
+            if(cbCheckForUpdates.Checked)
             {
-                if(cbCheckForUpdates.Checked)
-                {
-                    node.InnerText = "true";
-                }
-                else
-                {
-                    node.InnerText = "false";
-                }
+                userSettings.SetBool("CheckForUpdates", true);
+                return;
             }
-            doc.Save("UserSettings.xml");
+
+            userSettings.SetBool("CheckForUpdates", false);
+
         }
 
         private void cbDirectoriesOnly_CheckedChanged(object sender, EventArgs e)
@@ -355,6 +353,27 @@ namespace Snap2HTMLNG
                 txtSearchPattern.Text = "*";
                 txtSearchPattern.Enabled = true;
             }
+        }
+
+        private void chkFileDateEnable_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkFileDateEnable.Checked == true)
+            {
+                btnFileDateConfigure.Enabled = true;
+                dateTimePickerFileDate.Enabled = true;
+            } else
+            {
+                dateTimePickerFileDate.Enabled = false;
+                btnFileDateConfigure.Enabled = false;
+                dateTimePickerFileDate.Value = dateTimePickerFileDate.MinDate;
+            }
+        
+        }
+
+        private void btnFileDateConfigure_Click(object sender, EventArgs e)
+        {
+            frmFileDateConfigure frmFileDateConfigure = new frmFileDateConfigure();
+            frmFileDateConfigure.ShowDialog();
         }
     }
 }

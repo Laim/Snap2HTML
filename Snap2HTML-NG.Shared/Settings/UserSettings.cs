@@ -30,7 +30,11 @@ namespace Snap2HTMLNG.Shared.Settings
                 $"LinkRoot,{string.Empty}",
                 "SearchPattern,*",
                 "DirectoriesOnly,false",
-                "CheckForUpdates,false"
+                "CheckForUpdates,false",
+                "ExcludeEmptyDirectories,false",
+                "FileDate,01/01/1753 00:00:00",
+                "FileDate_Operator,0",
+                "FileDate_Basis,0"
             };
 
             // Check if the file exists.  If it does, check if we have any new settings that need added to the settings file.
@@ -183,6 +187,25 @@ namespace Snap2HTMLNG.Shared.Settings
             return value;
         }
 
+        public DateTime GetDateTime(string key)
+        {
+            XmlDocument doc = new XmlDocument();
+            doc.Load(SettingsFile);
+            XmlNode node = doc.SelectSingleNode($"//{GetType().Name}/{key}");
+
+            DateTime value;
+            if (node == null)
+            {
+                value = DateTime.Today.AddYears(-900);
+            }
+            else
+            {
+                value = DateTime.Parse(node.InnerText);
+            }
+
+            return value;
+        }
+
         /// <summary>
         /// Sets the value of the key to the passed parameter
         /// </summary>
@@ -240,6 +263,32 @@ namespace Snap2HTMLNG.Shared.Settings
         /// <param name="key">Key to update</param>
         /// <param name="value">Key Value</param>
         public void SetString(string key, string value)
+        {
+            XmlDocument doc = new XmlDocument();
+            doc.Load(SettingsFile);
+
+            if (doc.SelectSingleNode($"//{GetType().Name}/{key}") == null)
+            {
+                XmlNode field = doc.CreateElement(key);
+                field.InnerText = value.ToString();
+                doc.DocumentElement.AppendChild(field);
+                doc.Save(SettingsFile);
+            }
+            else
+            {
+                XmlNode node;
+                node = doc.SelectSingleNode($"//{GetType().Name}/{key}");
+                node.InnerText = value.ToString();
+                doc.Save(SettingsFile);
+            }
+        }
+
+        /// <summary>
+        /// Sets the value of the key to the passed parameter
+        /// </summary>
+        /// <param name="key">Key to update</param>
+        /// <param name="value">Key Value</param>
+        public void SetDateTime(string key, DateTime value)
         {
             XmlDocument doc = new XmlDocument();
             doc.Load(SettingsFile);

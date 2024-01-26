@@ -1,4 +1,7 @@
-﻿namespace Snap2HTMLNG.Shared.Models
+﻿using Snap2HTMLNG.Shared.Settings;
+using System;
+
+namespace Snap2HTMLNG.Shared.Models
 {
     public class UserSettingsModel
     {
@@ -89,6 +92,40 @@
 			get { return _checkForUpdates; }
 			set { _checkForUpdates = value; }
 		}
+
+		private DateTime _fileDate;
+
+		public DateTime FileDate
+		{
+			get { return _fileDate; }
+			set { _fileDate = value; }
+		}
+
+		private FileDateOperator _fileDateOperator;
+
+		public FileDateOperator FileDateOperator
+		{
+			get { return _fileDateOperator; }
+			set { _fileDateOperator = value; }
+		}
+
+		private FileDateBasis _fileDateBasis;
+
+		public FileDateBasis FileDateBasis
+		{
+			get { return _fileDateBasis; }
+			set { _fileDateBasis = value; }
+		}
+
+		private bool _excludeEmptyDirectories;
+
+		public bool ExcludeEmptyDirectories
+		{
+			get { return _excludeEmptyDirectories; }
+			set { _excludeEmptyDirectories = value; }
+		}
+
+
 
 	}
 }

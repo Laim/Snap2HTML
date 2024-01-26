@@ -24,7 +24,10 @@ namespace Snap2HTMLNG
                 OpenInBrowserAfterCapture = us.GetBool("OpenInBrowserAfterCapture"),
                 LinkFiles = us.GetBool("LinkFiles"),
                 LinkRoot = us.GetString("LinkRoot"),
-                SearchPattern = us.GetString("SearchPattern")
+                SearchPattern = us.GetString("SearchPattern"),
+                FileDate = us.GetDateTime("FileDate"),
+                FileDateBasis = (FileDateBasis)us.GetInt("FileDate_Basis"),
+                FileDateOperator = (FileDateOperator)us.GetInt("FileDate_Operator")
             };
 
             DataBuilder.Build(usm, Application.ProductName, Application.ProductVersion, backgroundWorker);

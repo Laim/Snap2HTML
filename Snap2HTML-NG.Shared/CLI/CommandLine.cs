@@ -34,58 +34,80 @@ namespace Snap2HTMLNG.Shared.CLI
             foreach (string arg in args)
             {
                 // check if the user has passed a path
-                if(arg.StartsWith("-path:"))
+                if(arg.StartsWith("-path:".ToLower()))
                 {
                     list.Add(new CommandLineModel { Name = "path", Value = arg.Split(new char[] { ':' }, 2).Last() });
                 }
 
                 // check if the user has passed the output location
                 // this is the full path and file name (C:\Temp\Output.html)
-                if(arg.StartsWith("-output:"))
+                if(arg.StartsWith("-output:".ToLower()))
                 {
                     list.Add(new CommandLineModel { Name = "output", Value = arg.Split(new char[] { ':' }, 2).Last() });
                 }
 
                 // Check if the user wants us to link the files in the document for easy viewing
-                if(arg.StartsWith("-link:"))
+                if(arg.StartsWith("-link:".ToLower()))
                 {
                     list.Add(new CommandLineModel { Name = "link", Value = arg.Split(new char[] { ':' }, 2).Last() });
                 }
 
                 // Title, if omitted it will be automatically generated
-                if(arg.StartsWith("-title:"))
+                if(arg.StartsWith("-title:".ToLower()))
                 {
                     list.Add(new CommandLineModel { Name = "title", Value = arg.Split(new char[] { ':' }, 2).Last() });
                 }
 
                 // Include hidden files or not
-                if(arg.StartsWith("-hidden"))
+                if(arg.StartsWith("-hidden".ToLower()))
                 {
                     list.Add(new CommandLineModel { Name = "hidden", Value = "" });
                 }
 
                 // Include system files or not
-                if(arg.StartsWith("-system"))
+                if(arg.StartsWith("-system".ToLower()))
                 {
                     list.Add(new CommandLineModel { Name = "system", Value = "" });
                 }
 
                 // Return Help information
-                if(arg.StartsWith("-help") || arg.StartsWith("-h"))
+                if(arg.StartsWith("-help".ToLower()) || arg.StartsWith("-h".ToLower()))
                 {
                     list.Add(new CommandLineModel { Name = "help", Value = "" });
                 }
 
                 // Search Pattern, default is *
-                if(arg.StartsWith("-pattern:"))
+                if(arg.StartsWith("-pattern:".ToLower()))
                 {
                     list.Add(new CommandLineModel { Name = "pattern", Value = arg.Split(new char[] {':'}, 2).Last() });
                 }
 
                 // Randomize the file name
-                if(arg.StartsWith("-randomize"))
+                if(arg.StartsWith("-randomize".ToLower()))
                 {
                     list.Add(new CommandLineModel { Name = "randomize", Value = "" });
+                }
+
+                // Excludes directories with zero files etc. in them from the scan
+                if(arg.StartsWith("-excludeEmptyDirectories".ToLower()))
+                {
+                    list.Add(new CommandLineModel { Name = "excludeEmptyDirectories", Value = "" });
+                }
+
+                // File Date Stuff
+                if (arg.StartsWith("-fileDate:".ToLower()))
+                {
+                    list.Add(new CommandLineModel { Name = "fileDate", Value = arg.Split(new char[] { ':' }, 2).Last() });
+                }
+
+                if (arg.StartsWith("-fileDateBasis:".ToLower()))
+                {
+                    list.Add(new CommandLineModel { Name = "fileDateBasis", Value = arg.Split(new char[] { ':' }, 2).Last() });
+                }
+
+                if (arg.StartsWith("-fileDateOperator:".ToLower()))
+                {
+                    list.Add(new CommandLineModel { Name = "fileDateOperator", Value = arg.Split(new char[] { ':' }, 2).Last() });
                 }
 
 
