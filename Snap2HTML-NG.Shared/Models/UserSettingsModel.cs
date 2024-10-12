@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using Snap2HTMLNG.Shared.Settings;
+using System;
 
 namespace Snap2HTMLNG.Shared.Models
 {
@@ -75,6 +76,56 @@ namespace Snap2HTMLNG.Shared.Models
 			get { return _searchPattern; }
 			set { _searchPattern = value; }
 		}
+
+		private bool _directoriesOnly;
+
+		public bool DirectoriesOnly
+		{
+			get { return _directoriesOnly; }
+			set { _directoriesOnly = value; }
+		}
+
+		private bool _checkForUpdates;
+
+		public bool CheckForUpdates
+		{
+			get { return _checkForUpdates; }
+			set { _checkForUpdates = value; }
+		}
+
+		private DateTime _fileDate;
+
+		public DateTime FileDate
+		{
+			get { return _fileDate; }
+			set { _fileDate = value; }
+		}
+
+		private FileDateOperator _fileDateOperator;
+
+		public FileDateOperator FileDateOperator
+		{
+			get { return _fileDateOperator; }
+			set { _fileDateOperator = value; }
+		}
+
+		private FileDateBasis _fileDateBasis;
+
+		public FileDateBasis FileDateBasis
+		{
+			get { return _fileDateBasis; }
+			set { _fileDateBasis = value; }
+		}
+
+		private bool _excludeEmptyDirectories;
+
+		public bool ExcludeEmptyDirectories
+		{
+			get { return _excludeEmptyDirectories; }
+			set { _excludeEmptyDirectories = value; }
+		}
+
+
 
 	}
 }

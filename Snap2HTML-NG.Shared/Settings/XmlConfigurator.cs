@@ -3,8 +3,8 @@ using System.Xml;
 
 namespace Snap2HTMLNG.Shared.Settings
 {
+    [Obsolete("No longer used, see UserSettings", true)]
     /// <summary>
-    /// TODO: Change this entire thing.  Is ugly as hell and does not work very well at all lol.
     /// Configuration Class used for reading and writing user settings
     /// </summary>
     public class XmlConfigurator

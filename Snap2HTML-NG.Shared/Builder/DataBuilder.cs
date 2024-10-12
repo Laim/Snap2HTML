@@ -8,6 +8,8 @@ using Snap2HTMLNG.Shared.Utils.Legacy;
 using System.Diagnostics;
 using System.Windows.Forms;
 using Snap2HTMLNG.Shared.CLI;
+using System.Linq;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Tab;
 
 namespace Snap2HTMLNG.Shared.Builder
 {
@@ -197,10 +199,107 @@ namespace Snap2HTMLNG.Shared.Builder
                     currentDir.Properties.Add("Created", created_date);
 
                     // Get files in folder
-                    List<string> files;
+                    List<string> files = new List<string>();
                     try
                     {
-                        files = new List<string>(Directory.GetFiles(dirName, settings.SearchPattern, SearchOption.TopDirectoryOnly));
+
+                        if(settings.FileDateBasis == Settings.FileDateBasis.Both)
+                        {
+
+                            // if CreationTime == date || ModifiedDate == date
+                            if(settings.FileDateOperator == Settings.FileDateOperator.Equal)
+                            {
+                                files = new List<string>(
+                                    Directory.GetFiles(dirName, settings.SearchPattern, SearchOption.TopDirectoryOnly)
+                                    .Where(x => new FileInfo(x).CreationTime.Date == settings.FileDate || new FileInfo(x).LastWriteTime.Date == settings.FileDate)
+                                    );
+                            }
+
+                            // if CreationTime < date || ModifiedDate < date
+                            if(settings.FileDateOperator == Settings.FileDateOperator.LessThan)
+                            {
+                                files = new List<string>(
+                                    Directory.GetFiles(dirName, settings.SearchPattern, SearchOption.TopDirectoryOnly)
+                                    .Where(x => new FileInfo(x).CreationTime.Date < settings.FileDate || new FileInfo(x).LastWriteTime.Date < settings.FileDate)
+                                    );
+                            }
+
+                            // if CreationTime > date || ModifiedDate > date
+                            if (settings.FileDateOperator == Settings.FileDateOperator.MoreThan)
+                            {
+                                files = new List<string>(
+                                    Directory.GetFiles(dirName, settings.SearchPattern, SearchOption.TopDirectoryOnly)
+                                    .Where(x => new FileInfo(x).CreationTime.Date > settings.FileDate || new FileInfo(x).LastWriteTime.Date > settings.FileDate)
+                                    );
+                            }
+
+                        }
+
+                        if(settings.FileDateBasis == Settings.FileDateBasis.CreatedDate)
+                        {
+                            // if CreationTime == date
+                            if (settings.FileDateOperator == Settings.FileDateOperator.Equal)
+                            {
+                                files = new List<string>(
+                                    Directory.GetFiles(dirName, settings.SearchPattern, SearchOption.TopDirectoryOnly)
+                                    .Where(x => new FileInfo(x).CreationTime.Date == settings.FileDate)
+                                    );
+                            }
+
+                            // if CreationTime < date 
+                            if (settings.FileDateOperator == Settings.FileDateOperator.LessThan)
+                            {
+                                files = new List<string>(
+                                    Directory.GetFiles(dirName, settings.SearchPattern, SearchOption.TopDirectoryOnly)
+                                    .Where(x => new FileInfo(x).CreationTime.Date < settings.FileDate)
+                                    );
+                            }
+
+                            // if CreationTime > date
+                            if (settings.FileDateOperator == Settings.FileDateOperator.MoreThan)
+                            {
+                                files = new List<string>(
+                                    Directory.GetFiles(dirName, settings.SearchPattern, SearchOption.TopDirectoryOnly)
+                                    .Where(x => new FileInfo(x).CreationTime.Date > settings.FileDate)
+                                    );
+                            }
+                        }
+
+                        if(settings.FileDateBasis == Settings.FileDateBasis.ModifiedDate)
+                        {
+                            // if ModifiedDate == date
+                            if (settings.FileDateOperator == Settings.FileDateOperator.Equal)
+                            {
+                                files = new List<string>(
+                                    Directory.GetFiles(dirName, settings.SearchPattern, SearchOption.TopDirectoryOnly)
+                                    .Where(x => new FileInfo(x).LastWriteTime.Date == settings.FileDate)
+                                    );
+                            }
+
+                            // if ModifiedDate < date 
+                            if (settings.FileDateOperator == Settings.FileDateOperator.LessThan)
+                            {
+                                files = new List<string>(
+                                    Directory.GetFiles(dirName, settings.SearchPattern, SearchOption.TopDirectoryOnly)
+                                    .Where(x => new FileInfo(x).LastWriteTime.Date < settings.FileDate)
+                                    );
+                            }
+
+                            // if ModifiedDate > date
+                            if (settings.FileDateOperator == Settings.FileDateOperator.MoreThan)
+                            {
+                                files = new List<string>(
+                                    Directory.GetFiles(dirName, settings.SearchPattern, SearchOption.TopDirectoryOnly)
+                                    .Where(x => new FileInfo(x).LastWriteTime.Date > settings.FileDate)
+                                    );
+                            }
+                        }
+
+                        // If the user doesn't wanna check based on FileDate
+                        if (settings.FileDate == DateTime.Parse("01/01/1753 00:00:00"))
+                        {
+                            files = new List<string>(Directory.GetFiles(dirName, settings.SearchPattern, SearchOption.TopDirectoryOnly));
+                        }
                     }
                     catch (Exception ex)
                     {
@@ -270,7 +369,10 @@ namespace Snap2HTMLNG.Shared.Builder
                         currentDir.Files.Add(currentFile);
                     }
 
-                    result.Add(currentDir);
+                    if(currentDir.Files.Count > 0 && !settings.ExcludeEmptyDirectories)
+                    {
+                        result.Add(currentDir);
+                    }
                 }
             }
             catch (Exception ex)
@@ -537,7 +639,7 @@ namespace Snap2HTMLNG.Shared.Builder
             {
                 if(!commandLine)
                 {
-                    MessageBox.Show("Failed to open 'Template.html' for reading:\n\n" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Failed to open 'Template.html' for reading:\n\n" + ex.Message, "Error #1", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     bgWorker.ReportProgress(0, "An error occurred...");
                     return;
                 } else
@@ -598,11 +700,11 @@ namespace Snap2HTMLNG.Shared.Builder
                     CommandLine.WriteInformation($"File generated to {settings.OutputFile}");
                     Environment.Exit(0);
                 }
-            } catch (Exception ex)
+        } catch (Exception ex)
             {
                 if (!commandLine)
                 {
-                    MessageBox.Show("Failed to open file for writing:\n\n" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("This can happen if no directories have been included in the scan \n\nFailed to open file for writing:\n\n" + ex.Message, "Error #2", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     bgWorker.ReportProgress(0, "An error occurred...");
                     return;
                 }
@@ -614,7 +716,7 @@ namespace Snap2HTMLNG.Shared.Builder
                 }
             }
 
-            if(!commandLine)
+            if (!commandLine)
             {
                 Cursor.Current = Cursors.Default;
                 bgWorker.ReportProgress(100, "Ready");

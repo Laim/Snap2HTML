@@ -32,6 +32,11 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
             this.tabCtrl = new System.Windows.Forms.TabControl();
             this.tabSnapshot = new System.Windows.Forms.TabPage();
+            this.btnFileDateConfigure = new System.Windows.Forms.Button();
+            this.chkFileDateEnable = new System.Windows.Forms.CheckBox();
+            this.dateTimePickerFileDate = new System.Windows.Forms.DateTimePicker();
+            this.lblFileDate = new System.Windows.Forms.Label();
+            this.cbDirectoriesOnly = new System.Windows.Forms.CheckBox();
             this.txtSearchPattern = new System.Windows.Forms.TextBox();
             this.lblSearchPattern = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -93,11 +98,16 @@
             this.tabCtrl.Margin = new System.Windows.Forms.Padding(4);
             this.tabCtrl.Name = "tabCtrl";
             this.tabCtrl.SelectedIndex = 0;
-            this.tabCtrl.Size = new System.Drawing.Size(451, 463);
+            this.tabCtrl.Size = new System.Drawing.Size(451, 521);
             this.tabCtrl.TabIndex = 0;
             // 
             // tabSnapshot
             // 
+            this.tabSnapshot.Controls.Add(this.btnFileDateConfigure);
+            this.tabSnapshot.Controls.Add(this.chkFileDateEnable);
+            this.tabSnapshot.Controls.Add(this.dateTimePickerFileDate);
+            this.tabSnapshot.Controls.Add(this.lblFileDate);
+            this.tabSnapshot.Controls.Add(this.cbDirectoriesOnly);
             this.tabSnapshot.Controls.Add(this.txtSearchPattern);
             this.tabSnapshot.Controls.Add(this.lblSearchPattern);
             this.tabSnapshot.Controls.Add(this.label2);
@@ -117,10 +127,59 @@
             this.tabSnapshot.Margin = new System.Windows.Forms.Padding(4);
             this.tabSnapshot.Name = "tabSnapshot";
             this.tabSnapshot.Padding = new System.Windows.Forms.Padding(4);
-            this.tabSnapshot.Size = new System.Drawing.Size(443, 434);
+            this.tabSnapshot.Size = new System.Drawing.Size(443, 492);
             this.tabSnapshot.TabIndex = 0;
             this.tabSnapshot.Text = "Snapshot";
             this.tabSnapshot.UseVisualStyleBackColor = true;
+            // 
+            // btnFileDateConfigure
+            // 
+            this.btnFileDateConfigure.Location = new System.Drawing.Point(258, 328);
+            this.btnFileDateConfigure.Name = "btnFileDateConfigure";
+            this.btnFileDateConfigure.Size = new System.Drawing.Size(86, 23);
+            this.btnFileDateConfigure.TabIndex = 25;
+            this.btnFileDateConfigure.Text = "Configure";
+            this.btnFileDateConfigure.UseVisualStyleBackColor = true;
+            this.btnFileDateConfigure.Click += new System.EventHandler(this.btnFileDateConfigure_Click);
+            // 
+            // chkFileDateEnable
+            // 
+            this.chkFileDateEnable.AutoSize = true;
+            this.chkFileDateEnable.Location = new System.Drawing.Point(352, 328);
+            this.chkFileDateEnable.Name = "chkFileDateEnable";
+            this.chkFileDateEnable.Size = new System.Drawing.Size(74, 21);
+            this.chkFileDateEnable.TabIndex = 24;
+            this.chkFileDateEnable.Text = "Enable";
+            this.chkFileDateEnable.UseVisualStyleBackColor = true;
+            this.chkFileDateEnable.CheckedChanged += new System.EventHandler(this.chkFileDateEnable_CheckedChanged);
+            // 
+            // dateTimePickerFileDate
+            // 
+            this.dateTimePickerFileDate.Enabled = false;
+            this.dateTimePickerFileDate.Location = new System.Drawing.Point(31, 352);
+            this.dateTimePickerFileDate.Name = "dateTimePickerFileDate";
+            this.dateTimePickerFileDate.Size = new System.Drawing.Size(399, 23);
+            this.dateTimePickerFileDate.TabIndex = 23;
+            // 
+            // lblFileDate
+            // 
+            this.lblFileDate.AutoSize = true;
+            this.lblFileDate.Location = new System.Drawing.Point(28, 332);
+            this.lblFileDate.Name = "lblFileDate";
+            this.lblFileDate.Size = new System.Drawing.Size(64, 17);
+            this.lblFileDate.TabIndex = 22;
+            this.lblFileDate.Text = "File Date";
+            // 
+            // cbDirectoriesOnly
+            // 
+            this.cbDirectoriesOnly.AutoSize = true;
+            this.cbDirectoriesOnly.Location = new System.Drawing.Point(213, 76);
+            this.cbDirectoriesOnly.Name = "cbDirectoriesOnly";
+            this.cbDirectoriesOnly.Size = new System.Drawing.Size(131, 21);
+            this.cbDirectoriesOnly.TabIndex = 21;
+            this.cbDirectoriesOnly.Text = "Directories Only";
+            this.cbDirectoriesOnly.UseVisualStyleBackColor = true;
+            this.cbDirectoriesOnly.CheckedChanged += new System.EventHandler(this.cbDirectoriesOnly_CheckedChanged);
             // 
             // txtSearchPattern
             // 
@@ -172,7 +231,7 @@
             // 
             this.chkOpenOutput.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.chkOpenOutput.AutoSize = true;
-            this.chkOpenOutput.Location = new System.Drawing.Point(213, 400);
+            this.chkOpenOutput.Location = new System.Drawing.Point(213, 458);
             this.chkOpenOutput.Margin = new System.Windows.Forms.Padding(4);
             this.chkOpenOutput.Name = "chkOpenOutput";
             this.chkOpenOutput.Size = new System.Drawing.Size(211, 21);
@@ -232,7 +291,7 @@
             this.cmdCreate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.cmdCreate.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmdCreate.Image = ((System.Drawing.Image)(resources.GetObject("cmdCreate.Image")));
-            this.cmdCreate.Location = new System.Drawing.Point(213, 343);
+            this.cmdCreate.Location = new System.Drawing.Point(213, 401);
             this.cmdCreate.Margin = new System.Windows.Forms.Padding(4);
             this.cmdCreate.Name = "cmdCreate";
             this.cmdCreate.Size = new System.Drawing.Size(213, 49);
@@ -286,7 +345,7 @@
             this.tabCustomDesign.Margin = new System.Windows.Forms.Padding(4);
             this.tabCustomDesign.Name = "tabCustomDesign";
             this.tabCustomDesign.Padding = new System.Windows.Forms.Padding(4);
-            this.tabCustomDesign.Size = new System.Drawing.Size(443, 434);
+            this.tabCustomDesign.Size = new System.Drawing.Size(443, 492);
             this.tabCustomDesign.TabIndex = 2;
             this.tabCustomDesign.Text = "Custom Design";
             this.tabCustomDesign.UseVisualStyleBackColor = true;
@@ -376,7 +435,7 @@
             this.tabAbout.Margin = new System.Windows.Forms.Padding(4);
             this.tabAbout.Name = "tabAbout";
             this.tabAbout.Padding = new System.Windows.Forms.Padding(4);
-            this.tabAbout.Size = new System.Drawing.Size(443, 434);
+            this.tabAbout.Size = new System.Drawing.Size(443, 492);
             this.tabAbout.TabIndex = 1;
             this.tabAbout.Text = "About";
             this.tabAbout.UseVisualStyleBackColor = true;
@@ -524,7 +583,7 @@
             this.statusStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.lblStatus});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 482);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 540);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(472, 26);
             this.statusStrip1.TabIndex = 1;
@@ -541,7 +600,7 @@
             this.AcceptButton = this.cmdCreate;
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(472, 508);
+            this.ClientSize = new System.Drawing.Size(472, 566);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.tabCtrl);
             this.DoubleBuffered = true;
@@ -618,6 +677,11 @@
         private System.Windows.Forms.GroupBox gbPreferences;
         private System.Windows.Forms.CheckBox cbCheckForUpdates;
         private System.Windows.Forms.Label lblCheckForUpdatesNotice;
+        private System.Windows.Forms.CheckBox cbDirectoriesOnly;
+        private System.Windows.Forms.Label lblFileDate;
+        private System.Windows.Forms.CheckBox chkFileDateEnable;
+        private System.Windows.Forms.DateTimePicker dateTimePickerFileDate;
+        private System.Windows.Forms.Button btnFileDateConfigure;
     }
 }
 
